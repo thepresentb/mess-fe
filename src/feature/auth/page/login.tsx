@@ -1,11 +1,17 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { authAction } from "../authSlice";
 import { useSelector } from "react-redux";
+import { Redirect } from "react-router";
+import { IRootState } from "../../../redux/rootState";
 
-export const Login = () => {
+const Login = () => {
+  if (localStorage.getItem('token')) {
+    return <Redirect to={'/chat'}/>
+  }
+
   const dispatch = useDispatch();
-  const { logging } = useSelector(state => state.auth)
+  const { logging } = useSelector((state : IRootState) => state.auth)
 
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -125,3 +131,5 @@ export const Login = () => {
     </div>
   );
 };
+
+export default React.memo(Login)

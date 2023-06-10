@@ -1,10 +1,10 @@
-import { history } from "../util/history"
+import { Redirect } from "react-router"
 
 export const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   if (!localStorage.getItem('token')) {
-    history.push('/login')
-    return <></>
+    return <Redirect to={'/login'}/>
   }
 
   return children
 }
+
