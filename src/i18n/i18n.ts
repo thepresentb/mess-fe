@@ -4,6 +4,15 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { enUS } from './en-US';
 import { viVN } from './vi-VN';
 
+interface Language {
+  [key: string]: string ,
+}
+
+export const lngs : Language = {
+  'en': ' English' ,
+  'vi':  'Tiếng Việt',
+};
+
 i18n
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
