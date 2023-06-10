@@ -4,6 +4,9 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { PrivateRoute } from "./common/PrivateRoute"
 import { NotFound } from "./common/NotFound"
+import { Login } from "./feature/auth/page/login"
+import { useDispatch } from "react-redux"
+import { authAction } from "./feature/auth/authSlice"
 
 const lngs = {
   en: { nativeName: 'English' },
@@ -13,15 +16,17 @@ const lngs = {
 function App() {
   const [darkToggle, setDarkToggle] = useState(false);
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch()
 
   return (
     <div className={`${darkToggle && 'dark'}`}>
       {/* test route */}
       <div className="flex">
         <div className="grow">
-          <Link className="mr-4" to={'/chat'}>{t('nav.chat')}</Link>
+          <Link className="mr-4" to={'/'}>{t('nav.chat')}</Link>
           <Link className="mr-4" to={'/login'}>{t('nav.login')}</Link>
           <Link className="mr-4" to={'/abc'}>not found</Link>
+          <p onClick={() => dispatch(authAction.logout())}>logout</p>
         </div>
         <div className="mr-4">
           {Object.keys(lngs).map((lng) => (
@@ -38,9 +43,10 @@ function App() {
 
       {/* main */}
       <Switch>
-        <Route path="/login"><>Login</></Route >
+        <Route path="/login"><Login /></Route >
         <Route
-          path="/chat"
+          exact
+          path="/"
         >
           <PrivateRoute>
             <>app</>

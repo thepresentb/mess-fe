@@ -4,9 +4,11 @@ import { history } from "../util/history";
 import createSagaMiddleware from 'redux-saga';
 import { ThunkAction, configureStore } from "@reduxjs/toolkit";
 import rootSaga from "./rootSage";
+import authReducer from "../feature/auth/authSlice";
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
+  auth: authReducer,
 })
 
 const sagaMiddleware = createSagaMiddleware()
