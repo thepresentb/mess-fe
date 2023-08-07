@@ -1,17 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../../typing/model/User';
+import { User } from '../../api/typing/responsive/AuthRes';
+import { LoginPayload } from '../../api/typing/payload/LoginPayload';
+import { RegisterPayload } from '../../api/typing/payload/RegisterPayload';
 
 export interface AuthState {
-  isLoggedIn: boolean,
-  logging?: boolean,
-  errors: string,
+  isSuccess: boolean,
+  isLogging?: boolean,
+  status: number | undefined,
   currentUser?: User,
 }
 
 const initialState: AuthState = {
-  isLoggedIn: false,
-  logging: false,
-  errors: '',
+  isSuccess: false,
+  isLogging: false,
+  status: undefined,
   currentUser: undefined,
 }
 
@@ -19,26 +21,30 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<{ username: string; password: string; }>) {
-      state.logging = true
+    login(state, action: PayloadAction<LoginPayload>) {
+      state.isLogging = true
     },
 
-    loginSuccess(state, action: PayloadAction<User>) {
-      state.logging = false
-      state.isLoggedIn = true
-      state.errors = ''
+    register(state, action: PayloadAction<RegisterPayload>) {
+      state.isLogging = true
+    },
+
+    authSuccess(state, action: PayloadAction<User>) {
+      state.isLogging = false
+      state.isSuccess = true
+      state.status = undefined
       state.currentUser = action.payload
     },
 
-    loginFailed(state, action: PayloadAction<string>) {
-      state.logging = false
-      state.errors = action.payload
+    authFailed(state, action: PayloadAction<number>) {
+      state.isLogging = false
+      state.status = action.payload
     },
 
     logout(state) {
-      state.errors = ''
-      state.logging = false
-      state.isLoggedIn = false
+      state.status = undefined
+      state.isLogging = false
+      state.isSuccess = false
       state.currentUser = undefined
     },
   }

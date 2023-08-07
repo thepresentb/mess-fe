@@ -5,13 +5,17 @@ import { enUS } from './en-US';
 import { viVN } from './vi-VN';
 
 interface Language {
-  [key: string]: string ,
+  [key: string]: string,
 }
 
-export const lngs : Language = {
-  'en': ' English' ,
-  'vi':  'Tiếng Việt',
+export const lngs: Language = {
+  'en': ' English',
+  'vi': 'Tiếng Việt',
 };
+
+if (!localStorage.getItem('i18nextLng')) {
+  localStorage.setItem('i18nextLng', 'en');
+}
 
 i18n
   // detect user language
@@ -23,7 +27,7 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     debug: true,
-    fallbackLng: 'vi',
+    fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
