@@ -1,6 +1,39 @@
 import axios from "axios";
+import { getToken } from "../util/auth";
 
-export const baseAxios = axios.create({
-  baseURL: "https://chat-app-liard-zeta.vercel.app/api/",
-  timeout: 5000,
-});
+export const request = () => {
+  const token = getToken();
+
+  const serviceUrl = import.meta.env.SERVICE_URL;
+  const instance = axios.create({
+    baseURL: serviceUrl ? serviceUrl : "http://localhost:5002/api/v1",
+    timeout: 5000
+  })
+
+  // Add a request interceptor
+  instance.interceptors.request.use(function (config) {
+    // Do something before request is sent
+
+    if (token) {
+      config.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  }, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  });
+
+  // Add a response interceptor
+  instance.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response.data;
+  }, function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  });
+
+  return instance;
+}
